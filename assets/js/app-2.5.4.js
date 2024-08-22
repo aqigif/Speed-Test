@@ -929,6 +929,13 @@ window.onload = function() {
           downloadTimeing = (window.performance.now() - downloadTime) / 1000;
           reportCurrentSpeed("dl");
           Show.showStatus("Mbps download");
+          window.parent.postMessage(
+            {
+              type: 'DOWNLOAD_SPEED', // You can define a type to identify the message
+              speed: currentSpeed,   // The data you want to send
+            },
+            '*' // The target origin, use '*' to send to any origin or specify the origin for security
+          );
           Show.mainGaugeProgress(currentSpeed);
           Show.LiveSpeed(currentSpeed);
           Show.Graph(currentSpeed, 0);
@@ -941,6 +948,12 @@ window.onload = function() {
             } else {
               Show.GaugeProgresstoZero(currentSpeed, "Upload");
             }
+            window.parent.postMessage(
+              {
+                type: 'FINISH', // You can define a type to identify the message
+              },
+              '*' // The target origin, use '*' to send to any origin or specify the origin for security
+            );
             Show.downloadResult(downloadSpeed);
             dataUsedfordl = dLoaded;
             stop = 1;
@@ -1297,6 +1310,13 @@ window.onload = function() {
             }, 0) / jitterResult.length;
             var leastJitter = jitterResult.toFixed(1);
             var leastPing = Math.min.apply(Math, pingResult);
+            window.parent.postMessage(
+              {
+                type: 'PING', // You can define a type to identify the message
+                ping: leastPing,   // The data you want to send
+              },
+              '*' // The target origin, use '*' to send to any origin or specify the origin for security
+            );
             finalPing.push(leastPing);
             pingServer.push(serverListElm);
             finalJitter.push(leastJitter);
@@ -1341,6 +1361,13 @@ window.onload = function() {
               statusPing = perfPing;
               pingResult.push(perfPing);
             }
+            window.parent.postMessage(
+              {
+                type: 'PING', // You can define a type to identify the message
+                ping: perfPing,   // The data you want to send
+              },
+              '*' // The target origin, use '*' to send to any origin or specify the origin for security
+            );
             if (pingResult.length > 1) {
               var jitterCalc = Math.abs(pingResult[pingResult.length - 1] - pingResult[pingResult.length - 2]).toFixed(1);
               jitterResult.push(parseFloat(jitterCalc));
